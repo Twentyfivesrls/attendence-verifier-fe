@@ -52,5 +52,5 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd /actions/dist_angular/${{ secrets.SSH_PROJECT_NAME }}
-            docker cp ./. ${{ secrets.SSH_CONTAINER }}:/var/www/html
+            docker cp ./. ${{ secrets.SSH_CONTAINER }}:/usr/share/nginx/html
             docker restart ${{ secrets.SSH_CONTAINER }}
