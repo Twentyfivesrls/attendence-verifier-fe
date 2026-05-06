@@ -1,0 +1,39 @@
+<h2 mat-dialog-title>Assegna operatori</h2>
+
+<mat-dialog-content>
+  <div class="search-box">
+    <mat-icon class="search-icon">search</mat-icon>
+    <input class="search-input" [(ngModel)]="search"
+           placeholder="Cerca per nome, cognome o email…" autocomplete="off" />
+    @if (search) {
+      <button mat-icon-button class="clear-btn" (click)="search = ''">
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+  </div>
+
+  <div class="list">
+    @for (op of filtered; track op.id) {
+      <div class="row" (click)="toggle(op.id)">
+        <mat-checkbox [checked]="selected.has(op.id)"
+                      (click)="$event.stopPropagation()">
+        </mat-checkbox>
+        <div class="info">
+          <span class="name">{{ fn(op) }}</span>
+          <span class="email">{{ op.email }}</span>
+        </div>
+      </div>
+    }
+    @if (filtered.length === 0) {
+      <p class="empty">Nessun operatore trovato</p>
+    }
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="false">Annulla</button>
+  <button mat-flat-button color="primary" (click)="save()" [disabled]="saving">
+    @if (saving) { <mat-spinner diameter="16"></mat-spinner> }
+    @else { Salva }
+  </button>
+</mat-dialog-actions>

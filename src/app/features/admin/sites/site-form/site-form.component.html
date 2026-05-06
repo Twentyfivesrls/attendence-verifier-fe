@@ -1,0 +1,50 @@
+<div class="d-flex align-items-center gap-2 mb-4">
+  <button class="btn btn-link text-secondary p-0" (click)="back()"><i class="mi">arrow_back</i></button>
+  <h1 class="fw-bold mb-0" style="color:#37474f">{{ isEdit ? 'Modifica Cantiere' : 'Nuovo Cantiere' }}</h1>
+</div>
+
+@if (loading) {
+  <div class="spinner-center"><div class="spinner-border text-primary"></div></div>
+} @else {
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+      <div class="card">
+        <div class="card-body p-4">
+          <div class="form-section-header">
+            <i class="mi">construction</i> Informazioni cantiere
+          </div>
+          <form [formGroup]="form" (ngSubmit)="save()">
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Nome cantiere *</label>
+              <input class="form-control" formControlName="name" placeholder="Es. Cantiere Via Roma"
+                     [class.is-invalid]="form.get('name')?.invalid && form.get('name')?.touched" />
+              <div class="invalid-feedback">Nome obbligatorio</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Indirizzo *</label>
+              <input class="form-control" formControlName="address" placeholder="Via, numero civico, città"
+                     [class.is-invalid]="form.get('address')?.invalid && form.get('address')?.touched" />
+              <div class="invalid-feedback">Indirizzo obbligatorio</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Tag NFC</label>
+              <input class="form-control" formControlName="nfcTagId" placeholder="UID del tag NFC associato" />
+              <div class="form-text">Lascia vuoto se non ancora assegnato</div>
+            </div>
+            <div class="mb-4">
+              <label class="form-label fw-semibold">Descrizione</label>
+              <textarea class="form-control" formControlName="description" rows="3" placeholder="Note aggiuntive..."></textarea>
+            </div>
+            <div class="d-flex justify-content-end gap-2 pt-2 border-top">
+              <button class="btn btn-outline-secondary" type="button" (click)="back()">Annulla</button>
+              <button class="btn btn-primary" type="submit" [disabled]="saving">
+                @if (saving) { <span class="spinner-border spinner-border-sm me-2"></span> }
+                {{ isEdit ? 'Salva modifiche' : 'Crea cantiere' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+}

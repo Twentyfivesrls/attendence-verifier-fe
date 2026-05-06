@@ -1,0 +1,91 @@
+@if (loading) {
+  <div class="spinner-center"><div class="spinner-border text-primary" style="width:2.5rem;height:2.5rem"></div></div>
+}
+
+@if (operator && !loading) {
+  <div class="d-flex align-items-center gap-2 mb-4">
+    <a class="btn btn-link text-secondary p-0" routerLink="/admin/operators"><i class="mi">arrow_back</i></a>
+    <h1 class="fw-bold mb-0 flex-grow-1" style="color:#37474f">Dettaglio Operatore</h1>
+    <a class="btn btn-outline-secondary btn-sm" [routerLink]="['/admin/operators', operatorId, 'edit']">
+      <i class="mi mi-sm">edit</i> Modifica
+    </a>
+    <a class="btn btn-outline-secondary btn-sm" [routerLink]="['/admin/statistics', operatorId]">
+      <i class="mi mi-sm">bar_chart</i> Statistiche
+    </a>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-body p-4 text-center">
+      <div class="avatar mx-auto mb-2" style="width:64px;height:64px;font-size:24px;background:linear-gradient(135deg,#1565c0,#1976d2)">
+        {{ operator.firstName[0] }}{{ operator.lastName[0] }}
+      </div>
+      <div class="fw-bold fs-5">{{ fn(operator) }}</div>
+      <div class="text-secondary small">{{ operator.email }}</div>
+      @if (!operator.active) {
+        <span class="badge-danger mt-2 d-inline-block">Operatore inattivo</span>
+      }
+    </div>
+    @if (operator.phone || operator.fiscalCode) {
+      <div class="card-body border-top p-4">
+        @if (operator.phone) {
+          <div class="info-row"><span class="info-label">Telefono</span><span>{{ operator.phone }}</span></div>
+        }
+        @if (operator.fiscalCode) {
+          <div class="info-row"><span class="info-label">Codice fiscale</span><code>{{ operator.fiscalCode }}</code></div>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="section-label">Cantieri assegnati</div>
+  <div class="mb-3">
+    <button class="btn btn-primary btn-sm" (click)="openAssignDialog()">
+      <i class="mi mi-sm me-1">construction</i> Assegna / rimuovi cantieri
+    </button>
+  </div>
+
+  @if (assignedSites.length > 0) {
+    <div class="card mb-3">
+      <ul class="list-group list-group-flush">
+        @for (site of assignedSites; track site.id) {
+          <li class="list-group-item d-flex align-items-center gap-3 px-4 py-3">
+            <i class="mi" style="color:#1565c0">construction</i>
+            <div class="flex-grow-1">
+              <div class="fw-semibold">{{ site.name }}</div>
+              <div class="text-secondary small">{{ site.address }}</div>
+            </div>
+            <button class="btn btn-link text-danger p-0" (click)="removeSite(site.id)" title="Rimuovi">
+              <i class="mi mi-sm">remove_circle_outline</i>
+            </button>
+          </li>
+        }
+      </ul>
+    </div>
+  } @else {
+    <p class="empty-state">Nessun cantiere assegnato</p>
+  }
+
+  <div class="section-label">Azioni rapide</div>
+  <div class="card mb-3">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item list-group-item-action row-clickable d-flex align-items-center gap-3 px-4 py-3"
+          [routerLink]="['/admin/attendance']" [queryParams]="{operatorId: operatorId}">
+        <i class="mi" style="color:#e65100">access_time</i>
+        <span class="flex-grow-1 fw-semibold">Visualizza presenze</span>
+        <i class="mi mi-sm text-secondary">chevron_right</i>
+      </li>
+      <li class="list-group-item list-group-item-action row-clickable d-flex align-items-center gap-3 px-4 py-3"
+          [routerLink]="['/admin/documents']" [queryParams]="{operatorId: operatorId}">
+        <i class="mi" style="color:#1565c0">folder</i>
+        <span class="flex-grow-1 fw-semibold">Gestisci documenti</span>
+        <i class="mi mi-sm text-secondary">chevron_right</i>
+      </li>
+    </ul>
+  </div>
+
+  @if (operator.active) {
+    <button class="btn btn-outline-danger btn-sm" (click)="confirmDeactivate()">
+      <i class="mi mi-sm me-1">person_off</i> Disattiva operatore
+    </button>
+  }
+}

@@ -1,0 +1,72 @@
+<h1 class="fw-bold mb-4" style="color:#37474f">Presenze</h1>
+
+<div class="d-flex flex-wrap gap-3 align-items-center mb-4">
+  <select class="form-select" style="min-width:200px;max-width:280px"
+          [(ngModel)]="selectedOperatorId" (ngModelChange)="load()">
+    <option value="">Tutti gli operatori</option>
+    @for (op of operators; track op.id) {
+      <option [value]="op.id">{{ nameFn(op) }}</option>
+    }
+  </select>
+
+  <select class="form-select" style="min-width:200px;max-width:280px"
+          [(ngModel)]="selectedSiteId" (ngModelChange)="load()">
+    <option value="">Tutti i cantieri</option>
+    @for (site of sites; track site.id) {
+      <option [value]="site.id">{{ site.name }}</option>
+    }
+  </select>
+
+  <button class="btn btn-outline-secondary" (click)="load()" title="Aggiorna">
+    <i class="mi mi-sm">refresh</i>
+  </button>
+</div>
+
+@if (loading) {
+  <div class="spinner-center"><div class="spinner-border text-primary" style="width:2.5rem;height:2.5rem"></div></div>
+}
+@if (error) {
+  <div class="error-center">
+    <i class="mi mi-lg">error_outline</i>
+    <p>{{ error }}</p>
+    <button class="btn btn-outline-secondary btn-sm" (click)="load()">Riprova</button>
+  </div>
+}
+@if (!loading && !error) {
+  <div class="card">
+    @if (records.length === 0) {
+      <div class="empty-state">Nessuna presenza registrata</div>
+    } @else {
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Operatore</th>
+              <th>Cantiere</th>
+              <th>Ingresso</th>
+              <th>Uscita</th>
+              <th>Durata</th>
+              <th>Stato</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (r of records; track r.id) {
+              <tr>
+                <td>{{ r.operatorName ?? operatorName(r.operatorId) }}</td>
+                <td>{{ r.siteName ?? siteName(r.siteId) }}</td>
+                <td>{{ r.entryTime | date:'dd/MM/yyyy HH:mm' }}</td>
+                <td>{{ r.exitTime ? (r.exitTime | date:'HH:mm') : '—' }}</td>
+                <td>{{ r.workedMinutes ? formatFn(r.workedMinutes) : '—' }}</td>
+                <td>
+                  <span [class]="r.status === 'EXITED' ? 'badge-success' : 'badge-warning'">
+                    {{ r.status === 'EXITED' ? 'Completata' : 'In corso' }}
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+}

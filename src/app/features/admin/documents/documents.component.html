@@ -1,0 +1,51 @@
+<h1 class="fw-bold mb-4" style="color:#37474f">Documenti Operatori</h1>
+
+<div class="d-flex flex-wrap gap-3 align-items-center mb-4">
+  <select class="form-select" style="min-width:280px;max-width:360px"
+          [(ngModel)]="selectedOperatorId" (ngModelChange)="loadDocuments()">
+    <option value="">Seleziona operatore…</option>
+    @for (op of operators; track op.id) {
+      <option [value]="op.id">{{ nameFn(op) }}</option>
+    }
+  </select>
+
+  @if (selectedOperatorId) {
+    <button class="btn btn-primary" (click)="triggerUpload()">
+      <i class="mi mi-sm me-1">upload_file</i> Carica documento
+    </button>
+  }
+</div>
+
+@if (!selectedOperatorId) {
+  <div class="empty-state">Seleziona un operatore per visualizzare i documenti</div>
+}
+
+@if (selectedOperatorId) {
+  @if (loadingDocs) {
+    <div class="spinner-center"><div class="spinner-border text-primary" style="width:2.5rem;height:2.5rem"></div></div>
+  } @else if (documents.length > 0) {
+    <div class="card">
+      <ul class="list-group list-group-flush">
+        @for (doc of documents; track doc.id) {
+          <li class="list-group-item d-flex align-items-center gap-3 px-4 py-3">
+            <i class="mi" style="color:#1565c0">description</i>
+            <div class="flex-grow-1">
+              <div class="fw-semibold">{{ doc.fileName }}</div>
+              @if (doc.description) {
+                <div class="text-secondary small">{{ doc.description }}</div>
+              }
+            </div>
+            <button class="btn btn-link text-primary p-0 me-1" (click)="download(doc)" title="Scarica">
+              <i class="mi mi-sm">download</i>
+            </button>
+            <button class="btn btn-link text-danger p-0" (click)="confirmDelete(doc)" title="Elimina">
+              <i class="mi mi-sm">delete</i>
+            </button>
+          </li>
+        }
+      </ul>
+    </div>
+  } @else {
+    <div class="empty-state">Nessun documento caricato</div>
+  }
+}

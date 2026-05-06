@@ -1,0 +1,19 @@
+<h1 class="fw-bold mb-1" style="color:#37474f">Dashboard</h1>
+<p class="text-secondary mb-4">Benvenuto nel pannello di amministrazione</p>
+
+<div class="row g-4">
+  @for (card of cards; track card.route) {
+    <div class="col-sm-6 col-xl-3">
+      <div class="card dash-card h-100" (click)="go(card.route)">
+        <div class="card-body p-4">
+          <div class="icon-wrap" [style.background]="card.bg">
+            <i class="mi">{{ card.icon }}</i>
+          </div>
+          <div class="card-title">{{ card.label }}</div>
+          <p class="card-desc">{{ card.desc }}</p>
+          <div class="card-arrow"><i class="mi mi-sm">arrow_forward</i></div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

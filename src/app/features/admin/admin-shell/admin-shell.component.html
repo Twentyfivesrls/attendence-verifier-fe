@@ -1,0 +1,69 @@
+<!-- Mobile top bar -->
+@if (isMobile) {
+  <nav class="navbar navbar-dark px-3" style="background:#1565c0;position:sticky;top:0;z-index:200">
+    <button class="btn btn-link text-white p-0 me-3" (click)="sidebarOpen = !sidebarOpen">
+      <i class="mi">menu</i>
+    </button>
+    <span class="navbar-brand mb-0 h1 fw-bold fs-6">Attendance Verifier</span>
+  </nav>
+}
+
+<div class="app-layout">
+  <!-- Sidebar -->
+  @if (!isMobile || sidebarOpen) {
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo"><i class="mi">badge</i></div>
+        <div class="sidebar-app-name">
+          <span class="title">Attendance</span>
+          <span class="sub">Verifier</span>
+        </div>
+      </div>
+
+      <div class="sidebar-section">Navigazione</div>
+
+      <nav>
+        @for (item of navItems; track item.route) {
+          <a class="nav-link" [routerLink]="item.route" routerLinkActive="active"
+             (click)="isMobile && (sidebarOpen = false)">
+            <i class="mi">{{ item.icon }}</i>
+            {{ item.label }}
+          </a>
+        }
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-row">
+          <div class="user-avatar">{{ (auth.getUsername() || 'A')[0].toUpperCase() }}</div>
+          <div class="flex-grow-1 overflow-hidden">
+            <div class="user-name text-truncate">{{ auth.getUsername() }}</div>
+            <div class="user-role">Amministratore</div>
+          </div>
+          <button class="btn-logout" (click)="confirmLogout()" title="Esci">
+            <i class="mi">logout</i>
+          </button>
+        </div>
+      </div>
+    </aside>
+  }
+
+  <!-- Page content -->
+  <main class="main-content">
+    <router-outlet />
+  </main>
+</div>
+
+<!-- Toast notifications -->
+<div class="toast-container-fixed">
+  @for (t of toasts$ | async; track trackToast($index, t)) {
+    <div class="toast show align-items-center text-white border-0"
+         [class.bg-success]="t.type==='success'"
+         [class.bg-danger]="t.type==='danger'"
+         [class.bg-warning]="t.type==='warning'">
+      <div class="d-flex">
+        <div class="toast-body">{{ t.message }}</div>
+        <button class="btn-close btn-close-white me-2 m-auto" (click)="toast.remove(t.id)"></button>
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,72 @@
+@if (loading) {
+  <div class="spinner-center"><div class="spinner-border text-primary" style="width:2.5rem;height:2.5rem"></div></div>
+}
+@if (site && !loading) {
+  <div class="d-flex align-items-center gap-2 mb-4">
+    <a class="btn btn-link text-secondary p-0" routerLink="/admin/sites"><i class="mi">arrow_back</i></a>
+    <h1 class="fw-bold mb-0 flex-grow-1" style="color:#37474f">{{ site.name }}</h1>
+    <a class="btn btn-outline-secondary btn-sm" [routerLink]="['/admin/sites', siteId, 'edit']">
+      <i class="mi mi-sm">edit</i> Modifica
+    </a>
+    <button class="btn btn-outline-danger btn-sm" (click)="confirmDelete()">
+      <i class="mi mi-sm">delete</i>
+    </button>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-body p-4">
+      <div class="info-row"><span class="info-label">Nome</span><span>{{ site.name }}</span></div>
+      <div class="info-row"><span class="info-label">Indirizzo</span><span>{{ site.address }}</span></div>
+      @if (site.nfcTagId) {
+        <div class="info-row"><span class="info-label">Tag NFC</span><code>{{ site.nfcTagId }}</code></div>
+      }
+      @if (site.description) {
+        <div class="info-row"><span class="info-label">Descrizione</span><span>{{ site.description }}</span></div>
+      }
+      <div class="info-row">
+        <span class="info-label">Stato</span>
+        <span [class]="site.active ? 'badge-success' : 'badge-danger'">{{ site.active ? 'Attivo' : 'Inattivo' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Operatori assegnati</div>
+  <div class="mb-3">
+    <button class="btn btn-primary btn-sm" (click)="openAssignDialog()">
+      <i class="mi mi-sm me-1">person_add</i> Assegna / rimuovi operatori
+    </button>
+  </div>
+
+  @if (assignedOperators.length > 0) {
+    <div class="card mb-3">
+      <ul class="list-group list-group-flush">
+        @for (op of assignedOperators; track op.id) {
+          <li class="list-group-item d-flex align-items-center gap-3 px-4 py-3">
+            <div class="avatar">{{ op.firstName[0] }}</div>
+            <div class="flex-grow-1">
+              <div class="fw-semibold">{{ fn(op) }}</div>
+              <div class="text-secondary small">{{ op.email }}</div>
+            </div>
+            <button class="btn btn-link text-danger p-0" (click)="removeOperator(op.id)" title="Rimuovi">
+              <i class="mi mi-sm">remove_circle_outline</i>
+            </button>
+          </li>
+        }
+      </ul>
+    </div>
+  } @else {
+    <p class="empty-state">Nessun operatore assegnato</p>
+  }
+
+  <div class="section-label">Azioni rapide</div>
+  <div class="card">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item list-group-item-action row-clickable d-flex align-items-center gap-3 px-4 py-3"
+          [routerLink]="['/admin/attendance']" [queryParams]="{siteId: siteId}">
+        <i class="mi" style="color:#e65100">access_time</i>
+        <span class="flex-grow-1 fw-semibold">Visualizza presenze</span>
+        <i class="mi mi-sm text-secondary">chevron_right</i>
+      </li>
+    </ul>
+  </div>
+}

@@ -1,0 +1,41 @@
+<div class="d-flex align-items-center mb-4">
+  <h1 class="fw-bold mb-0 flex-grow-1" style="color:#37474f">Cantieri</h1>
+  <a class="btn btn-primary" routerLink="/admin/sites/new">
+    <i class="mi mi-sm me-1">add</i> Nuovo cantiere
+  </a>
+</div>
+
+@if (loading) {
+  <div class="spinner-center"><div class="spinner-border text-primary" style="width:2.5rem;height:2.5rem"></div></div>
+}
+@if (error) {
+  <div class="error-center">
+    <i class="mi mi-lg">error_outline</i>
+    <p>{{ error }}</p>
+    <button class="btn btn-outline-secondary btn-sm" (click)="load()">Riprova</button>
+  </div>
+}
+@if (!loading && !error) {
+  <div class="card">
+    @if (sites.length === 0) {
+      <div class="empty-state">Nessun cantiere presente</div>
+    } @else {
+      <ul class="list-group list-group-flush">
+        @for (site of sites; track site.id) {
+          <li class="list-group-item list-group-item-action row-clickable d-flex align-items-center gap-3 px-4 py-3"
+              [routerLink]="['/admin/sites', site.id]">
+            <i class="mi" style="color:#1565c0">construction</i>
+            <div class="flex-grow-1">
+              <div class="fw-semibold">{{ site.name }}</div>
+              <div class="text-secondary small">{{ site.address }}</div>
+            </div>
+            <span [class]="site.active ? 'badge-success' : 'badge-danger'">
+              {{ site.active ? 'Attivo' : 'Inattivo' }}
+            </span>
+            <i class="mi mi-sm text-secondary">chevron_right</i>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+}

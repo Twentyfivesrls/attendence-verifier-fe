@@ -1,0 +1,87 @@
+<div class="d-flex align-items-center gap-2 mb-4">
+  <button class="btn btn-link text-secondary p-0" (click)="back()"><i class="mi">arrow_back</i></button>
+  <h1 class="fw-bold mb-0" style="color:#37474f">{{ isEdit ? 'Modifica Operatore' : 'Nuovo Operatore' }}</h1>
+</div>
+
+@if (loading) {
+  <div class="spinner-center"><div class="spinner-border text-primary"></div></div>
+} @else {
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+      <div class="card">
+        <div class="card-body p-4">
+          <div class="form-section-header">
+            <i class="mi">person</i> Dati anagrafici
+          </div>
+          <form [formGroup]="form" (ngSubmit)="save()">
+            <div class="row g-3 mb-3">
+              <div class="col-sm-6">
+                <label class="form-label fw-semibold">Nome *</label>
+                <input class="form-control" formControlName="firstName" placeholder="Mario"
+                       [class.is-invalid]="form.get('firstName')?.invalid && form.get('firstName')?.touched" />
+                <div class="invalid-feedback">Obbligatorio</div>
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label fw-semibold">Cognome *</label>
+                <input class="form-control" formControlName="lastName" placeholder="Rossi"
+                       [class.is-invalid]="form.get('lastName')?.invalid && form.get('lastName')?.touched" />
+                <div class="invalid-feedback">Obbligatorio</div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Email *</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="mi mi-sm">email</i></span>
+                <input class="form-control" formControlName="email" type="email" placeholder="mario.rossi@email.com"
+                       [class.is-invalid]="form.get('email')?.invalid && form.get('email')?.touched" />
+                <div class="invalid-feedback">Email valida obbligatoria</div>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-semibold">Password {{ isEdit ? '(lascia vuoto per non modificare)' : '*' }}</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="mi mi-sm">lock_outline</i></span>
+                <input class="form-control" formControlName="password"
+                       [type]="hidePassword ? 'password' : 'text'"
+                       [class.is-invalid]="form.get('password')?.invalid && form.get('password')?.touched" />
+                <button class="btn btn-outline-secondary" type="button" (click)="hidePassword = !hidePassword">
+                  <i class="mi mi-sm">{{ hidePassword ? 'visibility_off' : 'visibility' }}</i>
+                </button>
+                <div class="invalid-feedback">Password obbligatoria</div>
+              </div>
+            </div>
+
+            <div class="form-section-header">
+              <i class="mi">info_outline</i> Contatti e dati aggiuntivi
+            </div>
+
+            <div class="row g-3 mb-4">
+              <div class="col-sm-6">
+                <label class="form-label fw-semibold">Telefono</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="mi mi-sm">phone</i></span>
+                  <input class="form-control" formControlName="phone" placeholder="+39 000 0000000" />
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label fw-semibold">Codice fiscale</label>
+                <input class="form-control" formControlName="fiscalCode"
+                       placeholder="RSSMRA80A01H501U" style="text-transform:uppercase" />
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 pt-2 border-top">
+              <button class="btn btn-outline-secondary" type="button" (click)="back()">Annulla</button>
+              <button class="btn btn-primary" type="submit" [disabled]="saving">
+                @if (saving) { <span class="spinner-border spinner-border-sm me-2"></span> }
+                {{ isEdit ? 'Salva modifiche' : 'Crea operatore' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+}

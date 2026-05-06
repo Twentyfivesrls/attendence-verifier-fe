@@ -1,0 +1,35 @@
+<h1 class="fw-bold mb-4" style="color:#37474f">I miei Documenti</h1>
+
+@if (loading) {
+  <div class="spinner-center"><div class="spinner-border text-primary" style="width:2.5rem;height:2.5rem"></div></div>
+}
+@if (error) {
+  <div class="error-center">
+    <i class="mi mi-lg">error_outline</i>
+    <p>{{ error }}</p>
+  </div>
+}
+@if (!loading && !error) {
+  @if (documents.length > 0) {
+    <div class="card">
+      <ul class="list-group list-group-flush">
+        @for (doc of documents; track doc.id) {
+          <li class="list-group-item d-flex align-items-center gap-3 px-4 py-3">
+            <i class="mi" style="color:#1565c0">description</i>
+            <div class="flex-grow-1">
+              <div class="fw-semibold">{{ doc.fileName }}</div>
+              @if (doc.description) {
+                <div class="text-secondary small">{{ doc.description }}</div>
+              }
+            </div>
+            <button class="btn btn-link text-primary p-0" (click)="download(doc)" title="Scarica">
+              <i class="mi mi-sm">download</i>
+            </button>
+          </li>
+        }
+      </ul>
+    </div>
+  } @else {
+    <div class="empty-state">Nessun documento disponibile</div>
+  }
+}

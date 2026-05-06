@@ -1,0 +1,41 @@
+<h1 class="fw-bold mb-4" style="color:#37474f">Le mie Presenze</h1>
+
+@if (loading) {
+  <div class="spinner-center"><div class="spinner-border text-primary" style="width:2.5rem;height:2.5rem"></div></div>
+}
+@if (error) {
+  <div class="error-center">
+    <i class="mi mi-lg">error_outline</i>
+    <p>{{ error }}</p>
+    <button class="btn btn-outline-secondary btn-sm" (click)="load()">Riprova</button>
+  </div>
+}
+@if (!loading && !error) {
+  @if (records.length > 0) {
+    <div class="card">
+      <ul class="list-group list-group-flush">
+        @for (r of records; track r.id) {
+          <li class="list-group-item d-flex align-items-center gap-3 px-4 py-3">
+            <i class="mi" [style.color]="r.status === 'EXITED' ? '#2e7d32' : '#e65100'">
+              {{ r.status === 'EXITED' ? 'check_circle' : 'radio_button_checked' }}
+            </i>
+            <div class="flex-grow-1">
+              <div class="fw-semibold">{{ r.siteName ?? r.siteId }}</div>
+              <div class="text-secondary small">
+                Ingresso: {{ r.entryTime | date:'dd/MM/yyyy HH:mm' }}
+                @if (r.exitTime) { &nbsp;·&nbsp; Uscita: {{ r.exitTime | date:'HH:mm' }} }
+              </div>
+            </div>
+            @if (r.workedMinutes) {
+              <span class="badge-success">{{ fmt(r.workedMinutes) }}</span>
+            } @else {
+              <span class="badge-warning">In corso</span>
+            }
+          </li>
+        }
+      </ul>
+    </div>
+  } @else {
+    <div class="empty-state">Nessuna presenza registrata</div>
+  }
+}
