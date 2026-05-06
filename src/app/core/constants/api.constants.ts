@@ -1,6 +1,6 @@
-// Empty in dev: requests are proxied by the Angular dev server (proxy.conf.json → 192.168.1.228:8090).
-// In production, set this to the backend base URL or use a reverse proxy for /api.
-export const API_BASE_URL = '';
+import { environment } from '../../../environments/environment';
+
+export const API_BASE_URL = environment.apiUrl;
 
 export const ApiEndpoints = {
   authLogin:    '/api/auth/login',
