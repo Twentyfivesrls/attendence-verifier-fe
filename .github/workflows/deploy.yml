@@ -41,7 +41,7 @@ jobs:
             cd ${{ secrets.SSH_PROJECT_NAME }}
 
       - name: Move build to server with rsync
-        run: rsync -avz -e "ssh -p ${{ secrets.SSH_PORT }}" ./dist/attendance-verifier-web/. ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/actions/dist_angular/${{ secrets.SSH_PROJECT_NAME }}/
+        run: rsync -avz -e "ssh -p ${{ secrets.SSH_PORT }}" ./dist/. ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/actions/dist_angular/
 
       - name: Move data inside Nginx Container
         uses: appleboy/ssh-action@master
