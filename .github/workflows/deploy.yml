@@ -15,9 +15,6 @@ jobs:
       - run: npm install --legacy-peer-deps
       - run: npm run build
 
-      - name: Inject backend URL into nginx.conf
-        run: sed -i 's|BACKEND_URL_PLACEHOLDER|${{ secrets.BACKEND_URL }}|g' nginx.conf
-
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
         with:
